@@ -7,9 +7,16 @@
       "methods": [
         { "name": "md5", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
         { "name": "sha1", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "sha224", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
         { "name": "sha256", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "sha384", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
         { "name": "sha512", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
-        { "name": "hmacSha256", "returns": "String", "params": [{ "name": "key", "type": "String" }, { "name": "data", "type": "String" }] }
+        { "name": "hmacSha1", "returns": "String", "params": [{ "name": "key", "type": "String" }, { "name": "data", "type": "String" }] },
+        { "name": "hmacSha256", "returns": "String", "params": [{ "name": "key", "type": "String" }, { "name": "data", "type": "String" }] },
+        { "name": "hmacSha512", "returns": "String", "params": [{ "name": "key", "type": "String" }, { "name": "data", "type": "String" }] },
+        { "name": "aesEncrypt", "returns": "ByteArray", "params": [{ "name": "key", "type": "ByteArray" }, { "name": "iv", "type": "ByteArray" }, { "name": "data", "type": "ByteArray" }, { "name": "mode", "type": "String" }, { "name": "padding", "type": "String" }] },
+        { "name": "aesDecrypt", "returns": "ByteArray", "params": [{ "name": "key", "type": "ByteArray" }, { "name": "iv", "type": "ByteArray" }, { "name": "data", "type": "ByteArray" }, { "name": "mode", "type": "String" }, { "name": "padding", "type": "String" }] },
+        { "name": "randomBytes", "returns": "ByteArray", "params": [{ "name": "length", "type": "Int" }] }
       ]
     }
   ]
