@@ -92,6 +92,14 @@ target_link_libraries(nrpc_lib PRIVATE nrp_core)
 add_executable(nrpc compiler/src/main.cpp)
 target_link_libraries(nrpc PRIVATE nrpc_lib nrp_core)
 
+# Auto-run nrpc on specs/ after building nrpc
+add_custom_command(
+    TARGET nrpc POST_BUILD
+    COMMAND $<TARGET_FILE:nrpc> ${CMAKE_CURRENT_SOURCE_DIR}/specs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Running NRP Compiler (nrpc) to auto-generate JNI, Reflection, and Kotlin SDK bindings..."
+)
+
 # Enable Testing
 enable_testing()
 add_subdirectory(tests)
