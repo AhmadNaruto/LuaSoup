@@ -1,4 +1,4 @@
-name: Release Build & Artifacts
+name: Android ARM64 Release Build & Artifacts
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - 'v*'
 
 jobs:
-  create-release:
-    name: Build Native & Create GitHub Release
+  create-android-arm64-release:
+    name: Build Android ARM64 Native & Create GitHub Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,36 +24,58 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Build Tools
+      - name: Setup Android NDK
+        uses: nsetup/setup-ndk@v3
+        with:
+          ndk-version: r26b
+
+      - name: Install Host Build Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build build-essential g++ tar zip
 
-      - name: Configure CMake
-        run: cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build Libraries & Executables
-        run: cmake --build build --config Release
-
-      - name: Run NRP Compiler (nrpc)
-        run: ./build/nrpc specs/
-
-      - name: Run All Tests
-        run: ctest --test-dir build --output-on-failure
-
-      - name: Package Release Assets
+      - name: Build Host NRP Compiler (nrpc)
         run: |
-          mkdir -p release_dist
-          cp build/libnrp_core.a release_dist/ || true
-          cp build/libnrp_core.so release_dist/ || true
-          cp build/nrpc release_dist/ || true
-          tar -czvf luasoup-nrp-linux-x86_64.tar.gz -C release_dist .
+          cmake -B build-host -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-host --target nrpc
+          ./build-host/nrpc specs/
+
+      - name: Run Host Test Suite
+        run: |
+          cmake --build build-host --config Release
+          ctest --test-dir build-host --output-on-failure
+
+      - name: Cross-Compile Android ARM64 (arm64-v8a) Native Core
+        run: |
+          cmake -B build-android-arm64 -S . -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-24 \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-android-arm64 --config Release
+
+      - name: Package Android ARM64 Release Assets
+        run: |
+          mkdir -p release_dist_arm64
+          cp build-android-arm64/libnrp_core.a release_dist_arm64/ || true
+          cp build-android-arm64/libnrp_core.so release_dist_arm64/ || true
+          tar -czvf luasoup-nrp-android-arm64-v8a.tar.gz -C release_dist_arm64 .
+
+      - name: Build Android SDK AAR (if gradlew present)
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x gradlew
+            ./gradlew :kotlin:luasoup-sdk:assembleRelease || true
+            cp kotlin/luasoup-sdk/build/outputs/aar/*.aar ./luasoup-sdk-release.aar || true
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          name: "LuaSoup NRP v${{ github.ref_name }} (Android ARM64)"
           files: |
-            luasoup-nrp-linux-x86_64.tar.gz
+            luasoup-nrp-android-arm64-v8a.tar.gz
+            luasoup-sdk-release.aar
             generated/jni/nrp_jni_bridge.cpp
             generated/reflection/nrp_reflection_descriptors.cpp
             kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/GeneratedNRPBridge.kt
