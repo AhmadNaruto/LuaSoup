@@ -60,9 +60,9 @@ jobs:
           cp build-android-arm64/libnrp_core.so release_dist_arm64/ || true
           tar -czvf luasoup-nrp-android-arm64-v8a.tar.gz -C release_dist_arm64 .
 
-          # Package Kotlin SDK sources zip
+          # Package all Kotlin SDK sources zip recursively
           mkdir -p kotlin_dist
-          cp kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/*.kt kotlin_dist/
+          find kotlin/luasoup-sdk/src/main/java -name "*.kt" -exec cp {} kotlin_dist/ \;
           zip -j luasoup-sdk-kotlin-sources.zip kotlin_dist/*
 
       - name: Build Android SDK AAR (if gradlew present)
