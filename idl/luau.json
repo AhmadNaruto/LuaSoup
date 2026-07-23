@@ -1,0 +1,14 @@
+{
+  "module": "luau",
+  "namespace": "com.luasoup.luau",
+  "classes": [
+    {
+      "name": "LuauEngine",
+      "methods": [
+        { "name": "create", "returns": "LuauEngine", "params": [] },
+        { "name": "eval", "returns": "String", "params": [{ "name": "script", "type": "String" }] },
+        { "name": "close", "returns": "Void", "params": [] }
+      ]
+    }
+  ]
+}

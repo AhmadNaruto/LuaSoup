@@ -23,6 +23,34 @@ ASTModule Parser::parse_spec_file(const std::string& filepath) {
     std::ifstream file(filepath);
     if (!file.is_open()) return mod;
 
+    if (filepath.rfind(".json") != std::string::npos) {
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        std::string content = buffer.str();
+
+        // Extract module name
+        auto m_pos = content.find("\"module\"");
+        if (m_pos != std::string::npos) {
+            auto start = content.find('"', m_pos + 8);
+            auto end = content.find('"', start + 1);
+            if (start != std::string::npos && end != std::string::npos) {
+                mod.name = content.substr(start + 1, end - start - 1);
+            }
+        }
+
+        // Extract namespace
+        auto ns_pos = content.find("\"namespace\"");
+        if (ns_pos != std::string::npos) {
+            auto start = content.find('"', ns_pos + 11);
+            auto end = content.find('"', start + 1);
+            if (start != std::string::npos && end != std::string::npos) {
+                mod.namespace_name = content.substr(start + 1, end - start - 1);
+            }
+        }
+
+        return mod;
+    }
+
     std::string line;
     std::string current_heading;
     ASTClass* current_class = nullptr;
@@ -40,9 +68,6 @@ ASTModule Parser::parse_spec_file(const std::string& filepath) {
 
         if (trimmed.rfind("## ", 0) == 0) {
             current_heading = trim(trimmed.substr(3));
-            if (current_heading == "Public Objects" || current_heading == "Classes") {
-                // Prepare class container
-            }
             continue;
         }
 
@@ -88,7 +113,7 @@ ASTProject Parser::parse_specs_directory(const std::string& dirpath) {
 
     std::vector<fs::path> paths;
     for (const auto& entry : fs::directory_iterator(dirpath)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".md") {
+        if (entry.is_regular_file() && (entry.path().extension() == ".md" || entry.path().extension() == ".json")) {
             paths.push_back(entry.path());
         }
     }

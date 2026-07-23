@@ -1,0 +1,45 @@
+{
+  "module": "html",
+  "namespace": "com.luasoup.lexsoup",
+  "classes": [
+    {
+      "name": "LexSoup",
+      "methods": [
+        { "name": "parse", "returns": "Document", "params": [{ "name": "html", "type": "String" }] },
+        { "name": "parseBodyFragment", "returns": "Document", "params": [{ "name": "bodyHtml", "type": "String" }] }
+      ]
+    },
+    {
+      "name": "Document",
+      "parent": "Element",
+      "methods": [
+        { "name": "title", "returns": "String", "params": [] },
+        { "name": "body", "returns": "Element", "params": [] },
+        { "name": "head", "returns": "Element", "params": [] }
+      ]
+    },
+    {
+      "name": "Element",
+      "methods": [
+        { "name": "select", "returns": "Elements", "params": [{ "name": "cssQuery", "type": "String" }] },
+        { "name": "selectFirst", "returns": "Element", "params": [{ "name": "cssQuery", "type": "String" }] },
+        { "name": "text", "returns": "String", "params": [] },
+        { "name": "html", "returns": "String", "params": [] },
+        { "name": "outerHtml", "returns": "String", "params": [] },
+        { "name": "attr", "returns": "String", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "hasAttr", "returns": "Boolean", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "tagName", "returns": "String", "params": [] }
+      ]
+    },
+    {
+      "name": "Elements",
+      "methods": [
+        { "name": "text", "returns": "String", "params": [] },
+        { "name": "html", "returns": "String", "params": [] },
+        { "name": "attr", "returns": "String", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "first", "returns": "Element", "params": [] },
+        { "name": "last", "returns": "Element", "params": [] }
+      ]
+    }
+  ]
+}

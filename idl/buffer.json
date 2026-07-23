@@ -1,0 +1,13 @@
+{
+  "module": "buffer",
+  "namespace": "com.luasoup.buffer",
+  "classes": [
+    {
+      "name": "Buffer",
+      "methods": [
+        { "name": "slice", "returns": "Buffer", "params": [{ "name": "start", "type": "Int" }, { "name": "end", "type": "Int" }] },
+        { "name": "toByteArray", "returns": "ByteArray", "params": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "module": "crypto",
+  "namespace": "com.luasoup.crypto",
+  "classes": [
+    {
+      "name": "Crypto",
+      "methods": [
+        { "name": "md5", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "sha1", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "sha256", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "sha512", "returns": "String", "params": [{ "name": "data", "type": "String" }] },
+        { "name": "hmacSha256", "returns": "String", "params": [{ "name": "key", "type": "String" }, { "name": "data", "type": "String" }] }
+      ]
+    }
+  ]
+}

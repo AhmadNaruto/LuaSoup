@@ -1,0 +1,16 @@
+{
+  "module": "regex",
+  "namespace": "com.luasoup.regex",
+  "classes": [
+    {
+      "name": "Pattern",
+      "methods": [
+        { "name": "compile", "returns": "Pattern", "params": [{ "name": "regex", "type": "String" }] },
+        { "name": "match", "returns": "Match", "params": [{ "name": "input", "type": "String" }] },
+        { "name": "search", "returns": "Boolean", "params": [{ "name": "input", "type": "String" }] },
+        { "name": "replace", "returns": "String", "params": [{ "name": "input", "type": "String" }, { "name": "replacement", "type": "String" }] },
+        { "name": "split", "returns": "List", "params": [{ "name": "input", "type": "String" }] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "module": "json",
+  "namespace": "com.luasoup.json",
+  "classes": [
+    {
+      "name": "JsonObject",
+      "methods": [
+        { "name": "getString", "returns": "String", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "getNumber", "returns": "Double", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "getBoolean", "returns": "Boolean", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "getObject", "returns": "JsonObject", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "getArray", "returns": "JsonArray", "params": [{ "name": "key", "type": "String" }] }
+      ]
+    },
+    {
+      "name": "JsonArray",
+      "methods": [
+        { "name": "getString", "returns": "String", "params": [{ "name": "index", "type": "Int" }] },
+        { "name": "getNumber", "returns": "Double", "params": [{ "name": "index", "type": "Int" }] },
+        { "name": "getBoolean", "returns": "Boolean", "params": [{ "name": "index", "type": "Int" }] },
+        { "name": "getObject", "returns": "JsonObject", "params": [{ "name": "index", "type": "Int" }] },
+        { "name": "getArray", "returns": "JsonArray", "params": [{ "name": "index", "type": "Int" }] }
+      ]
+    }
+  ]
+}
