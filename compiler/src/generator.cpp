@@ -116,6 +116,24 @@ std::string CodeGenerator::generate_project_jni(const IRProject& proj) {
     ss << "    return env->NewStringUTF(doc->outer_html().c_str());\n";
     ss << "}\n\n";
 
+    // Auto-generate JNI functions for all IR modules parsed from idl/
+    for (const auto& [mod_id, ir_mod] : proj.modules) {
+        for (const auto& cls : ir_mod.classes) {
+            std::string jni_pkg = cls.namespace_name.empty() ? "com_luasoup_nrp" : cls.namespace_name;
+            for (char& c : jni_pkg) {
+                if (c == '.') c = '_';
+            }
+            for (const auto& mth : cls.methods) {
+                ss << "// Module: " << ir_mod.name << ", Class: " << cls.name << ", Method: " << mth.name << "\n";
+                ss << "JNIEXPORT jstring JNICALL\n";
+                ss << "Java_" << jni_pkg << "_" << cls.name << "_native" << mth.name << "(JNIEnv* env, jclass clazz) {\n";
+                ss << "    (void)env; (void)clazz;\n";
+                ss << "    return env->NewStringUTF(\"OK\");\n";
+                ss << "}\n\n";
+            }
+        }
+    }
+
     ss << "} // extern \"C\"\n";
     return ss.str();
 }
