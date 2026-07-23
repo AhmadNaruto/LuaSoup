@@ -18,6 +18,7 @@ typedef void* jobject;
 typedef jobject jclass;
 typedef jobject jstring;
 typedef jobject jarray;
+typedef jobject jlongArray;
 typedef jobject jthrowable;
 
 #define JNI_FALSE 0
@@ -41,6 +42,13 @@ struct JNIEnv_ {
     }
     jstring NewStringUTF(const char* utf) {
         return const_cast<jstring>(reinterpret_cast<const void*>(utf));
+    }
+    jlongArray NewLongArray(jsize len) {
+        (void)len;
+        return nullptr;
+    }
+    void SetLongArrayRegion(jlongArray array, jsize start, jsize len, const jlong* buf) {
+        (void)array; (void)start; (void)len; (void)buf;
     }
 };
 
