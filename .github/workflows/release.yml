@@ -1,0 +1,64 @@
+name: Release Build & Artifacts
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    name: Build Native & Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Build Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build build-essential g++ tar zip
+
+      - name: Configure CMake
+        run: cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Libraries & Executables
+        run: cmake --build build --config Release
+
+      - name: Run NRP Compiler (nrpc)
+        run: ./build/nrpc specs/
+
+      - name: Run All Tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Package Release Assets
+        run: |
+          mkdir -p release_dist
+          cp build/libnrp_core.a release_dist/ || true
+          cp build/libnrp_core.so release_dist/ || true
+          cp build/nrpc release_dist/ || true
+          tar -czvf luasoup-nrp-linux-x86_64.tar.gz -C release_dist .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            luasoup-nrp-linux-x86_64.tar.gz
+            generated/jni/nrp_jni_bridge.cpp
+            generated/reflection/nrp_reflection_descriptors.cpp
+            kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/GeneratedNRPBridge.kt
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
