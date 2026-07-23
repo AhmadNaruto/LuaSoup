@@ -1,0 +1,17 @@
+{
+  "module": "url",
+  "namespace": "com.luasoup.url",
+  "classes": [
+    {
+      "name": "Url",
+      "methods": [
+        { "name": "parse", "returns": "Url", "params": [{ "name": "urlString", "type": "String" }] },
+        { "name": "normalize", "returns": "String", "params": [] },
+        { "name": "getQueryParam", "returns": "String", "params": [{ "name": "key", "type": "String" }] },
+        { "name": "setQueryParam", "returns": "Url", "params": [{ "name": "key", "type": "String" }, { "name": "value", "type": "String" }] },
+        { "name": "percentEncode", "returns": "String", "params": [{ "name": "input", "type": "String" }] },
+        { "name": "percentDecode", "returns": "String", "params": [{ "name": "input", "type": "String" }] }
+      ]
+    }
+  ]
+}

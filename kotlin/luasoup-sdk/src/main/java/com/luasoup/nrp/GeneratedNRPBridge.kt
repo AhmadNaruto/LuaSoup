@@ -3,5 +3,5 @@ package com.luasoup.nrp
 
 object GeneratedNRPBridge {
     const val TARGET_ABI: String = "arm64-v8a"
-    const val TOTAL_MODULES: Int = 6
+    const val TOTAL_MODULES: Int = 10
 }

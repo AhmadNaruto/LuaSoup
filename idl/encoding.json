@@ -1,0 +1,17 @@
+{
+  "module": "encoding",
+  "namespace": "com.luasoup.encoding",
+  "classes": [
+    {
+      "name": "Encoding",
+      "methods": [
+        { "name": "toBase64", "returns": "String", "params": [{ "name": "data", "type": "ByteArray" }] },
+        { "name": "fromBase64", "returns": "ByteArray", "params": [{ "name": "base64Str", "type": "String" }] },
+        { "name": "toHex", "returns": "String", "params": [{ "name": "data", "type": "ByteArray" }] },
+        { "name": "fromHex", "returns": "ByteArray", "params": [{ "name": "hexStr", "type": "String" }] },
+        { "name": "encodeUrl", "returns": "String", "params": [{ "name": "input", "type": "String" }] },
+        { "name": "decodeUrl", "returns": "String", "params": [{ "name": "input", "type": "String" }] }
+      ]
+    }
+  ]
+}

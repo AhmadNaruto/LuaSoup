@@ -1,0 +1,12 @@
+{
+  "module": "javascript",
+  "namespace": "com.luasoup.js",
+  "classes": [
+    {
+      "name": "JavaScriptEngine",
+      "methods": [
+        { "name": "eval", "returns": "String", "params": [{ "name": "script", "type": "String" }] }
+      ]
+    }
+  ]
+}

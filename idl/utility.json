@@ -1,0 +1,14 @@
+{
+  "module": "utility",
+  "namespace": "com.luasoup.utility",
+  "classes": [
+    {
+      "name": "Utility",
+      "methods": [
+        { "name": "uuid", "returns": "String", "params": [] },
+        { "name": "version", "returns": "String", "params": [] },
+        { "name": "nowMillis", "returns": "Long", "params": [] }
+      ]
+    }
+  ]
+}
