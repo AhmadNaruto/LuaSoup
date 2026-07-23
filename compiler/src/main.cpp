@@ -59,6 +59,32 @@ int main(int argc, char** argv) {
         std::cout << " [GENERATED] kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/GeneratedNRPBridge.kt" << std::endl;
     }
 
+    // Automatically generate Kotlin class files for all parsed IR modules from specs/
+    for (const auto& [mod_id, ir_mod] : ir_proj.modules) {
+        if (ir_mod.classes.empty()) continue;
+        const auto& cls = ir_mod.classes.front();
+        std::string pkg = cls.namespace_name.empty() ? "com.luasoup.nrp" : cls.namespace_name;
+        std::string dir_path = "kotlin/luasoup-sdk/src/main/java/";
+        for (char c : pkg) {
+            if (c == '.') dir_path += '/';
+            else if (c == ' ') dir_path += '_';
+            else dir_path += static_cast<char>(std::tolower(c));
+        }
+        fs::create_directories(dir_path);
+        
+        std::string clean_name = cls.name;
+        for (char& c : clean_name) {
+            if (c == ' ') c = '_';
+        }
+
+        std::string file_path = dir_path + "/" + clean_name + ".kt";
+        std::ofstream mod_kt(file_path);
+        if (mod_kt.is_open()) {
+            mod_kt << nrpc::CodeGenerator::generate_kotlin(ir_mod);
+        }
+    }
+    std::cout << " [GENERATED] All Kotlin class files generated automatically across all packages from specs/" << std::endl;
+
     std::cout << "Automated Code Generation Completed Successfully for Android ARM64!" << std::endl;
     return 0;
 }
