@@ -17,6 +17,14 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic -Wconversion -Wshadow -O3)
 endif()
 
+# JNI Detection & Fallback
+find_package(JNI QUIET)
+if(JNI_FOUND)
+    include_directories(${JNI_INCLUDE_DIRS})
+else()
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/nrp/jni_stub)
+endif()
+
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
