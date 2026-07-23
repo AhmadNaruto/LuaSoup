@@ -53,12 +53,17 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
           cmake --build build-android-arm64 --config Release
 
-      - name: Package Android ARM64 Release Assets
+      - name: Package Android ARM64 Release Assets & Kotlin Sources
         run: |
           mkdir -p release_dist_arm64
           cp build-android-arm64/libnrp_core.a release_dist_arm64/ || true
           cp build-android-arm64/libnrp_core.so release_dist_arm64/ || true
           tar -czvf luasoup-nrp-android-arm64-v8a.tar.gz -C release_dist_arm64 .
+
+          # Package Kotlin SDK sources zip
+          mkdir -p kotlin_dist
+          cp kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/*.kt kotlin_dist/
+          zip -j luasoup-sdk-kotlin-sources.zip kotlin_dist/*
 
       - name: Build Android SDK AAR (if gradlew present)
         run: |
@@ -74,10 +79,14 @@ jobs:
           name: "LuaSoup NRP v${{ github.ref_name }} (Android ARM64)"
           files: |
             luasoup-nrp-android-arm64-v8a.tar.gz
+            luasoup-sdk-kotlin-sources.zip
             luasoup-sdk-release.aar
             generated/jni/nrp_jni_bridge.cpp
             generated/reflection/nrp_reflection_descriptors.cpp
+            kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/NRP.kt
+            kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/LuaSoupEngine.kt
             kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/GeneratedNRPBridge.kt
+            kotlin/luasoup-sdk/src/main/java/com/luasoup/nrp/Handle.kt
           draft: false
           prerelease: false
           generate_release_notes: true
