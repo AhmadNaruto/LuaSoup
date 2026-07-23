@@ -1,0 +1,18 @@
+[submodule "third_party/luau_upstream"]
+	path = third_party/luau_upstream
+	url = https://github.com/luau-lang/luau.git
+[submodule "third_party/lexbor_upstream"]
+	path = third_party/lexbor_upstream
+	url = https://github.com/lexbor/lexbor.git
+[submodule "third_party/re2_upstream"]
+	path = third_party/re2_upstream
+	url = https://github.com/google/re2.git
+[submodule "third_party/mbedtls_upstream"]
+	path = third_party/mbedtls_upstream
+	url = https://github.com/Mbed-TLS/mbedtls.git
+[submodule "third_party/quickjs_upstream"]
+	path = third_party/quickjs_upstream
+	url = https://github.com/bellard/quickjs.git
+[submodule "third_party/lonejson_upstream"]
+	path = third_party/lonejson_upstream
+	url = https://github.com/sa6mwa/lonejson.git
