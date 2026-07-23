@@ -24,31 +24,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android NDK
-        uses: nsetup/setup-ndk@v3
-        with:
-          ndk-version: r26b
-
       - name: Install Host Build Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build build-essential g++ tar zip
 
-      - name: Build Host NRP Compiler (nrpc)
+      - name: Build Host NRP Compiler (nrpc) & Run Code Generator
         run: |
           cmake -B build-host -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-host --target nrpc
+          cmake --build build-host --config Release
           ./build-host/nrpc specs/
 
       - name: Run Host Test Suite
-        run: |
-          cmake --build build-host --config Release
-          ctest --test-dir build-host --output-on-failure
+        run: ctest --test-dir build-host --output-on-failure
 
       - name: Cross-Compile Android ARM64 (arm64-v8a) Native Core
         run: |
+          NDK_PATH="${ANDROID_NDK_LATEST_HOME:-$ANDROID_NDK_HOME}"
+          if [ -z "$NDK_PATH" ] || [ ! -d "$NDK_PATH" ]; then
+            NDK_PATH=$(find $ANDROID_HOME/ndk -maxdepth 1 -mindepth 1 2>/dev/null | sort -V | tail -n 1)
+          fi
+          echo "Using Android NDK Path: $NDK_PATH"
+
           cmake -B build-android-arm64 -S . -G Ninja \
-            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+            -DCMAKE_TOOLCHAIN_FILE=$NDK_PATH/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-24 \
             -DCMAKE_BUILD_TYPE=Release
